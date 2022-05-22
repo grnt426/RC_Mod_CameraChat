@@ -1,10 +1,12 @@
 Camera Chat Mod
 ==================
-This mod allows you to type coordinates in chat and the game will send you there! Very useful if someone wants you to look somewhere by coordinates.
+This mod allows you to type in chat where you want to go and it sends you there!
 
 Usage
 =====
 Simply write `c 276:217` into the chat box to send your game to the coordinates 276:217. Note, the `c ` MUST have a space after it, and the coordinates must also have a colon between them.
+
+You can also do `c alnori wad` to send you to the Alnori system in Wad sector. If the sector name is really long, like `Djophar`, you only need the first three letters. For example, `c alnori djo` is the minimum needed.
 
 That's it!
 
