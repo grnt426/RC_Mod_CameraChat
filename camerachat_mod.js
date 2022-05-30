@@ -1,7 +1,7 @@
 class CameraChat {
     constructor() {
         // This would match something like "c 123:45"
-        this.matcher = /^c [0-9]{1,3}:[0-9]{1,3}/;
+        this.matcher = /^c\s[0-9]{1,3}[\s:][0-9]{1,3}/;
         this.nameMatcher = /^c [a-z\s]{1,40} [a-z]{1,40}/;
 
         this.nameMapping = this.#buildNameMapping();
@@ -28,19 +28,25 @@ class CameraChat {
     chatMessage(message) {
         if(this.matcher.test(message)) {
             try {
-                let input = message.split(" ")[1];
-                console.debug("Parsed input: " + input);
-                let coords = input.split(":");
-                console.debug("Parsed coords: " + coords);
-                let x = parseInt(coords[0]);
-                let y = parseInt(coords[1]);
+
+                // This allows us to support `c 193:212` and `c 193 212`
+                if(message.indexOf(":") !== 0) {
+                    message = message.replace(":", " ");
+                }
+                let input = message.split(" ");
+                window.granite.debug("Parsed input: " + input, window.granite.levels.DEBUG);
+                let x = parseInt(input[1]);
+                let y = parseInt(input[2]);
 
                 if(x >= 0 && x < 10000 && y >= 0 && y < 10000) {
                     window.granite.cameraControl.setCameraPosition(x, y, 30);
                 }
             }
             catch(err) {
-                console.error("Failed in processing chat command for CameraChat: " + err);
+                window.granite.debug(
+                    "Failed in processing chat command for CameraChat: " + err,
+                    window.granite.levels.ERROR
+                );
             }
 
             // Regardless of success/fail, this was a command intent. Let the handler know.
@@ -57,17 +63,23 @@ class CameraChat {
                 // token, which is the sector name
                 let systemName = input.slice(1, input.length - 1).join(" ").toLowerCase();
 
-                console.debug("Name: " + sectorName + " | System Name: " + systemName);
+                window.granite.debug(
+                    "Name: " + sectorName + " | System Name: " + systemName,
+                    window.granite.levels.DEBUG
+                );
 
                 let system = this.nameMapping[systemName + "," + sectorName];
                 if(system) {
                     let coords = system.position;
-                    console.debug("Retrieved coords: " + coords);
+                    window.granite.debug("Retrieved coords: " + coords, window.granite.levels.DEBUG);
                     window.granite.cameraControl.setCameraPosition(coords.x, coords.y, 30);
                 }
             }
             catch(err) {
-                console.error("Failed in processing chat command for CameraChat: " + err);
+                window.granite.debug(
+                    "Failed in processing chat command for CameraChat: " + err,
+                    window.granite.levels.ERROR
+                );
             }
 
             // Regardless of success/fail, this was a command intent. Let the handler know.
