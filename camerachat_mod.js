@@ -3,6 +3,7 @@ class CameraChat {
         // This would match something like "c 123:45"
         this.matcher = /^goto\s[0-9]{1,3}[\s:][0-9]{1,3}/;
         this.nameMatcher = /^goto [a-z\s]{1,40} [a-z]{1,40}/;
+        this.name = "Coordinate Jumper";
 
         this.nameMapping = this.#buildNameMapping();
     }
@@ -16,6 +17,7 @@ class CameraChat {
             let sectorName = galaxy.sectors[s.sector_id].name.toLowerCase();
 
             // Allow partial spelling of sectors, minimum three letters
+            // NOTE: we assume all sectors are unique for the first 3 letters. Never proven :\
             let start = sectorName.length < 3 ? sectorName.length : 3;
             for(let i = start; i <= sectorName.length; i++) {
                 mapping[name + "," + sectorName.substring(0, i)] = s;
@@ -43,6 +45,10 @@ class CameraChat {
                 }
             }
             catch(err) {
+                window.granite.showMessageInChat(
+                    "M:" + this.name,
+                    "Something went wrong in parsing that command! Send the rc_mod.log file to @Granite"
+                );
                 window.granite.debug(
                     "Failed in processing chat command for CameraChat: " + err,
                     window.granite.levels.ERROR
@@ -74,8 +80,18 @@ class CameraChat {
                     window.granite.debug("Retrieved coords: " + coords, window.granite.levels.DEBUG);
                     window.granite.cameraControl.setCameraPosition(coords.x, coords.y, 30);
                 }
+                else {
+                    window.granite.showMessageInChat(
+                        "M:" + this.name,
+                        "No such system/sector: " + systemName + " in " + sectorName
+                    );
+                }
             }
             catch(err) {
+                window.granite.showMessageInChat(
+                    "M:" + this.name,
+                    "Something went wrong in parsing that command! Send the rc_mod.log file to @Granite"
+                );
                 window.granite.debug(
                     "Failed in processing chat command for CameraChat: " + err,
                     window.granite.levels.ERROR
