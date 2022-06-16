@@ -21,3 +21,7 @@ Dump this file into the `Rising Constellation/dist/main/` directory of wherever 
 Known Issues
 ===========
 If the coordinates you provide are outside the bounds of the galaxy, such as too small numbers or very large numbers, your screen will turn all black and the client will be useless. I will try to find a way to prevent invalid coordinates from being accepted.
+
+Github
+======
+[RC Mod CameraChat](https://github.com/grnt426/RC_Mod_CameraChat)
