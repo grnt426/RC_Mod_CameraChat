@@ -1,8 +1,8 @@
 class CameraChat {
     constructor() {
         // This would match something like "c 123:45"
-        this.matcher = /^c\s[0-9]{1,3}[\s:][0-9]{1,3}/;
-        this.nameMatcher = /^c [a-z\s]{1,40} [a-z]{1,40}/;
+        this.matcher = /^goto\s[0-9]{1,3}[\s:][0-9]{1,3}/;
+        this.nameMatcher = /^goto [a-z\s]{1,40} [a-z]{1,40}/;
 
         this.nameMapping = this.#buildNameMapping();
     }
